@@ -7,7 +7,7 @@ document.querySelector('#app').innerHTML = `
     <a href="https://vite.dev" target="_blank">
       <img src="${viteLogo}" class="logo" alt="Vite logo" />
     </a>
-    <h1>Hello Vite!</h1>
+    <h1 class="text-4xl font-bold">Hello Vite!</h1>
   </div>
 `;
 
