@@ -1,11 +1,13 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from "vite";
+import eslintPlugin from "vite-plugin-eslint";
 
 export default defineConfig({
+  plugins: [eslintPlugin()],
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "@/styles.scss";`
-      }
-    }
-  }
+        additionalData: `@import "@/styles.scss";`,
+      },
+    },
+  },
 });
