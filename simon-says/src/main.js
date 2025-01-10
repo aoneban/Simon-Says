@@ -2,18 +2,59 @@ import './styles.scss';
 import { buttonNumbers, buttonLetters } from './data';
 
 class Keyboard {
+  round = 1;
+
   constructor(arr) {
     this.arr = arr;
     this.keyboardOne = null;
     this.keyboardTwo = null;
   }
 
+  createGreetings() {
+    const bodyElement = document.getElementById('app');
+    const greetings = document.createElement('h1');
+    greetings.classList.add('greetings');
+    greetings.textContent = 'Welcome to the game "Simon says"';
+    bodyElement.append(greetings);
+  }
+
+  createLevelButtons() {
+    const bodyElement = document.getElementById('app');
+    const wrapperButtons = document.createElement('div');
+    wrapperButtons.classList.add('wrapper-buttons');
+
+    const newGame = document.createElement('button');
+    newGame.classList.add('button-new-game');
+    newGame.textContent = 'New Game';
+
+    const buttonEasy = document.createElement('button');
+    buttonEasy.classList.add('button-level');
+    buttonEasy.textContent = 'Easy';
+
+    const buttonMedium = document.createElement('button');
+    buttonMedium.classList.add('button-level');
+    buttonMedium.textContent = 'Medium';
+
+    const buttonHard = document.createElement('button');
+    buttonHard.classList.add('button-level');
+    buttonHard.textContent = 'Hard';
+
+    wrapperButtons.append(newGame, buttonEasy, buttonMedium, buttonHard);
+    bodyElement.append(wrapperButtons);
+  }
+
   createWrapperApp() {
     const bodyElement = document.getElementById('app');
+    this.createGreetings();
+    this.createLevelButtons();
 
     const input = document.createElement('input');
     input.classList.add('text-input');
-    bodyElement.append(input);
+
+    const round = document.createElement('p');
+    round.classList.add('round');
+    round.textContent = `Round: ${this.round}/5`;
+    bodyElement.append(round, input);
 
     const keyboardWrapper = document.createElement('div');
     keyboardWrapper.classList.add('keyboard-wrapper');
@@ -21,11 +62,10 @@ class Keyboard {
 
     this.keyboardOne = document.createElement('div');
     this.keyboardOne.classList.add('keyboard-one');
-    keyboardWrapper.append(this.keyboardOne);
 
     this.keyboardTwo = document.createElement('div');
     this.keyboardTwo.classList.add('keyboard-two');
-    keyboardWrapper.append(this.keyboardTwo);
+    keyboardWrapper.append(this.keyboardOne, this.keyboardTwo);
   }
 
   createKeyboardNumbers(arr) {
