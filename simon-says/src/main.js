@@ -1,11 +1,5 @@
 import './styles.scss';
-
-const buttonNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-const buttonLetters = [
-  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-  ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
-];
+import { buttonNumbers, buttonLetters } from './data';
 
 class Keyboard {
   constructor(arr) {
@@ -26,16 +20,12 @@ class Keyboard {
     bodyElement.append(keyboardWrapper);
 
     this.keyboardOne = document.createElement('div');
-    this.keyboardOne.classList.add('keyboard');
+    this.keyboardOne.classList.add('keyboard-one');
     keyboardWrapper.append(this.keyboardOne);
 
     this.keyboardTwo = document.createElement('div');
-    this.keyboardTwo.classList.add('keyboard-2');
+    this.keyboardTwo.classList.add('keyboard-two');
     keyboardWrapper.append(this.keyboardTwo);
-
-    const paragraph1 = document.createElement('p');
-    paragraph1.append('Клавиатура создана в операционной системе iOS');
-    bodyElement.append(paragraph1);
   }
 
   createKeyboardNumbers(arr) {
@@ -60,9 +50,24 @@ class Keyboard {
       this.keyboardTwo.append(block);
     }
   }
+  createStartButton() {
+    const button = document.createElement('button');
+    button.classList.add('start-button');
+    button.textContent = 'Start';
+    this.keyboardTwo.append(button);
+  }
+
+  createSequenceButton() {
+    const button = document.createElement('button');
+    button.classList.add('sequence-button');
+    button.textContent = 'Repeat Sequence';
+    this.keyboardTwo.append(button);
+  }
 }
 
 const keyboard = new Keyboard();
 keyboard.createWrapperApp();
 keyboard.createKeyboardNumbers(buttonNumbers);
 keyboard.createKeyboardLetters(buttonLetters);
+keyboard.createStartButton();
+keyboard.createSequenceButton();
