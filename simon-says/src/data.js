@@ -4,3 +4,4 @@ export const buttonLetters = [
   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
   ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
 ];
+export const totalButtons = buttonNumbers.concat(...buttonLetters);

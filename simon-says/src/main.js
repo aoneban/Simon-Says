@@ -1,10 +1,18 @@
 import './styles.scss';
-import { buttonNumbers, buttonLetters } from './data';
+import { buttonNumbers, buttonLetters, totalButtons } from './data';
 import removeClass from './modules/removeClass';
 import addHiddenClass from './modules/addClass';
+import { getRandomNumberInRange } from './modules/generateRandomNum';
 
 class Keyboard {
   round = 1;
+  easy = true;
+  medium = false;
+  hard = false;
+  arrayLetters = [];
+  tempArray = [];
+  currentLetters = 10;
+  totalButtons = 10;
 
   constructor(arr) {
     this.arr = arr;
@@ -38,6 +46,9 @@ class Keyboard {
     buttonEasy.classList.add('button-level');
     buttonEasy.textContent = 'Easy';
     buttonEasy.addEventListener('click', () => {
+      this.easy = true;
+      this.medium = false;
+      this.hard = false;
       this.changeRound();
       addHiddenClass('hidden', 'letter');
       removeClass('hidden', 'figure');
@@ -47,6 +58,9 @@ class Keyboard {
     buttonMedium.classList.add('button-level');
     buttonMedium.textContent = 'Medium';
     buttonMedium.addEventListener('click', () => {
+      this.easy = false;
+      this.medium = true;
+      this.hard = false;
       this.changeRound();
       addHiddenClass('hidden', 'figure');
       removeClass('hidden', 'letter');
@@ -56,6 +70,9 @@ class Keyboard {
     buttonHard.classList.add('button-level');
     buttonHard.textContent = 'Hard';
     buttonHard.addEventListener('click', () => {
+      this.easy = false;
+      this.medium = false;
+      this.hard = true;
       this.changeRound();
       removeClass('hidden', 'letter');
       removeClass('hidden', 'figure');
@@ -72,6 +89,7 @@ class Keyboard {
 
     const input = document.createElement('input');
     input.classList.add('text-input');
+    input.disabled = true;
 
     const round = document.createElement('p');
     round.classList.add('round');
@@ -80,6 +98,17 @@ class Keyboard {
 
     const keyboardWrapper = document.createElement('div');
     keyboardWrapper.classList.add('keyboard-wrapper');
+    keyboardWrapper.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (event.target.classList.contains('button')) {
+        const input = document.querySelector('.text-input');
+        input.value += event.target.textContent;
+        event.target.classList.add('active');
+        setTimeout(() => {
+          event.target.classList.remove('active');
+        }, 200);
+      }
+    });
     bodyElement.append(keyboardWrapper);
 
     this.keyboardOne = document.createElement('div');
@@ -94,6 +123,7 @@ class Keyboard {
     arr.map((item) => {
       const button = document.createElement('button');
       button.classList.add('button', 'figure');
+      button.disabled = true;
       button.append(item);
       this.keyboardOne.append(button);
     });
@@ -117,6 +147,42 @@ class Keyboard {
     const button = document.createElement('button');
     button.classList.add('start-button');
     button.textContent = 'Start';
+    button.addEventListener('click', () => {
+      for (let i = 0; i < this.currentLetters; i += 1) {
+        this.arrayLetters.push(getRandomNumberInRange(0, 9));
+      }
+      const currentButtons = document.querySelectorAll('.button');
+      currentButtons.forEach((button) => {
+        if (!button.classList.contains('hidden')) {
+          this.tempArray.push(button);
+        }
+      });
+      for (let i = 0; i < this.arrayLetters.length; i += 1) {
+        for (let j = 0; j < this.tempArray.length; j += 1) {
+          if (
+            this.arrayLetters[i].toString() === this.tempArray[j].textContent
+          ) {
+            setTimeout(() => {
+              this.tempArray[j].classList.add('active');
+
+              setTimeout(() => {
+                this.tempArray[j].classList.remove('active');
+              }, 300);
+            }, i * 1000);
+          }
+        }
+      }
+      const input = document.querySelector('.text-input');
+      document
+        .querySelectorAll('.button')
+        .forEach((button) => (button.disabled = false));
+      input.disabled = false;
+      input.focus();
+      input.setAttribute('placeholder', 'Enter the answer');
+      input.setAttribute('maxlength', '2');
+      button.classList.add('hidden');
+      console.log(this.arrayLetters, this.tempArray);
+    });
     this.keyboardTwo.append(button);
   }
 
@@ -126,15 +192,34 @@ class Keyboard {
     button.textContent = 'Repeat Sequence';
     this.keyboardTwo.append(button);
   }
+
+  keydownHandler() {
+    document.addEventListener('keydown', (event) => {
+      const input = document.querySelector('.text-input');
+      if (document.activeElement !== input) {
+        event.preventDefault();
+      }
+      const buttons = document.querySelectorAll('.button');
+      buttons.forEach((button) => {
+        if (button.textContent === event.key && button.disabled === false) {
+          button.classList.add('active');
+          setTimeout(() => {
+            button.classList.remove('active');
+          }, 200);
+        }
+      });
+    });
+  }
 }
 
 const keyboard = new Keyboard();
 
-function initial() {
+function initialGame() {
   keyboard.createWrapperApp();
   keyboard.createKeyboardNumbers(buttonNumbers);
   keyboard.createKeyboardLetters(buttonLetters);
   keyboard.createStartButton();
   keyboard.createSequenceButton();
+  keyboard.keydownHandler();
 }
-initial();
+initialGame();
