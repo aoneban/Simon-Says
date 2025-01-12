@@ -1,5 +1,5 @@
 import './styles.scss';
-import { buttonNumbers, buttonLetters, totalButtons } from './data';
+import { buttonNumbers, buttonLetters } from './data';
 import removeClass from './modules/removeClass';
 import addHiddenClass from './modules/addClass';
 import { getRandomNumberInRange } from './modules/generateRandomNum';
@@ -11,7 +11,7 @@ class Keyboard {
   hard = false;
   arrayLetters = [];
   tempArray = [];
-  currentLetters = 10;
+  currentLetters = 6;
   totalButtons = 10;
 
   constructor(arr) {
@@ -148,6 +148,7 @@ class Keyboard {
     button.classList.add('start-button');
     button.textContent = 'Start';
     button.addEventListener('click', () => {
+      button.classList.add('hidden');
       for (let i = 0; i < this.currentLetters; i += 1) {
         this.arrayLetters.push(getRandomNumberInRange(0, 9));
       }
@@ -157,31 +158,19 @@ class Keyboard {
           this.tempArray.push(button);
         }
       });
-      for (let i = 0; i < this.arrayLetters.length; i += 1) {
-        for (let j = 0; j < this.tempArray.length; j += 1) {
-          if (
-            this.arrayLetters[i].toString() === this.tempArray[j].textContent
-          ) {
-            setTimeout(() => {
-              this.tempArray[j].classList.add('active');
-
-              setTimeout(() => {
-                this.tempArray[j].classList.remove('active');
-              }, 300);
-            }, i * 1000);
-          }
-        }
-      }
-      const input = document.querySelector('.text-input');
-      document
-        .querySelectorAll('.button')
-        .forEach((button) => (button.disabled = false));
-      input.disabled = false;
-      input.focus();
-      input.setAttribute('placeholder', 'Enter the answer');
-      input.setAttribute('maxlength', '2');
-      button.classList.add('hidden');
-      console.log(this.arrayLetters, this.tempArray);
+      generatePauseBetweenButtons(this.arrayLetters, this.tempArray);
+      setTimeout(() => {
+        document.querySelector('.sequence-button').disabled = false;
+        const input = document.querySelector('.text-input');
+        document
+          .querySelectorAll('.button')
+          .forEach((button) => (button.disabled = false));
+        input.disabled = false;
+        input.focus();
+        input.setAttribute('placeholder', 'Enter the answer');
+        input.setAttribute('maxlength', `${this.currentLetters}`);
+        console.log(this.arrayLetters, this.tempArray);
+      }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
   }
@@ -190,15 +179,17 @@ class Keyboard {
     const button = document.createElement('button');
     button.classList.add('sequence-button');
     button.textContent = 'Repeat Sequence';
+    button.disabled = true;
+    button.addEventListener('click', () => {
+      button.disabled = true;
+      generatePauseBetweenButtons(this.arrayLetters, this.tempArray);
+    });
     this.keyboardTwo.append(button);
   }
 
   keydownHandler() {
     document.addEventListener('keydown', (event) => {
-      const input = document.querySelector('.text-input');
-      if (document.activeElement !== input) {
-        event.preventDefault();
-      }
+      forbiddenEditInput(event);
       const buttons = document.querySelectorAll('.button');
       buttons.forEach((button) => {
         if (button.textContent === event.key && button.disabled === false) {
@@ -223,3 +214,34 @@ function initialGame() {
   keyboard.keydownHandler();
 }
 initialGame();
+
+function generatePauseBetweenButtons(arr1, arr2) {
+  for (let i = 0; i < arr1.length; i += 1) {
+    for (let j = 0; j < arr2.length; j += 1) {
+      if (arr1[i].toString() === arr2[j].textContent) {
+        setTimeout(() => {
+          arr2[j].classList.add('active');
+          setTimeout(() => {
+            arr2[j].classList.remove('active');
+          }, 300);
+        }, i * 1000);
+      }
+    }
+  }
+}
+
+function forbiddenEditInput(event) {
+  const input = document.querySelector('.text-input');
+  if (document.activeElement === input) {
+    const cursorPosition = input.selectionStart;
+    if (
+      (event.key === 'Backspace' && cursorPosition <= input.value.length) ||
+      (event.key === 'Delete' && cursorPosition < input.value.length)
+    ) {
+      event.preventDefault();
+    }
+    if (cursorPosition < input.value.length && event.key.length === 1) {
+      event.preventDefault();
+    }
+  }
+}
