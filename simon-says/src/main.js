@@ -106,6 +106,7 @@ class Keyboard {
       if (event.target.classList.contains('button')) {
         const input = document.querySelector('.text-input');
         input.value += event.target.textContent;
+        console.log('Это: ', input.value);
         event.target.classList.add('active');
         setTimeout(() => {
           event.target.classList.remove('active');
@@ -153,9 +154,13 @@ class Keyboard {
     button.addEventListener('click', () => {
       button.classList.add('hidden');
       checkCurrentLevel(this.easy, this.medium, this.hard);
-      for (let i = 0; i < this.currentLetters; i += 1) {
-        this.arrayLetters.push(getRandomNumberInRange(0, 36));
-      }
+      loopForCheckButtons(
+        this.easy,
+        this.medium,
+        this.hard,
+        this.arrayLetters,
+        this.currentLetters,
+      );
       const currentButtons = document.querySelectorAll('.button');
       currentButtons.forEach((button) => {
         if (!button.classList.contains('hidden')) {
@@ -252,7 +257,13 @@ initialGame();
 function generatePauseBetweenButtons(arr1, arr2, arr3 = []) {
   for (let i = 0; i < arr1.length; i += 1) {
     for (let j = 0; j < arr2.length; j += 1) {
-      if (arr1[i].toString() === arr2[j].textContent) {
+      let symbol = arr1[i];
+      if (typeof symbol === 'number' && symbol > 9) {
+        symbol = String.fromCharCode(symbol + 55);
+      }
+      if (
+        symbol.toString().toUpperCase() === arr2[j].textContent.toUpperCase()
+      ) {
         setTimeout(() => {
           arr3.push(arr2[j].textContent);
           arr2[j].classList.add('active');
@@ -311,5 +322,26 @@ function checkCurrentLevel(easy, medium, hard) {
     document.querySelector('.easy').disabled = true;
     document.querySelector('.medium').disabled = true;
     document.querySelector('.hard').disabled = false;
+    document.querySelector('.hard').disabled = false;
+  }
+}
+
+function loopForCheckButtons(easy, medium, hard, array, letters) {
+  for (let i = 0; i < letters; i += 1) {
+    let randomIndex;
+    if (easy) {
+      randomIndex = getRandomNumberInRange(0, 9);
+    } else if (medium) {
+      randomIndex = getRandomNumberInRange(10, 35);
+      if (randomIndex > 9) {
+        randomIndex = String.fromCharCode(randomIndex + 55);
+      }
+    } else if (hard) {
+      randomIndex = getRandomNumberInRange(0, 35);
+      if (randomIndex > 9) {
+        randomIndex = String.fromCharCode(randomIndex + 55);
+      }
+    }
+    array.push(randomIndex);
   }
 }
