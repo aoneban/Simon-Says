@@ -11,7 +11,7 @@ class Keyboard {
   hard = false;
   arrayLetters = [];
   tempArray = [];
-  currentLetters = 6;
+  currentLetters = 2;
   totalButtons = 10;
   arrayToShowInConsole = [];
 
@@ -30,7 +30,6 @@ class Keyboard {
   }
 
   changeRound() {
-    this.round = 1;
     document.querySelector('.round').textContent = `Round: ${this.round}/5`;
   }
 
@@ -44,7 +43,7 @@ class Keyboard {
     newGame.textContent = 'New Game';
 
     const buttonEasy = document.createElement('button');
-    buttonEasy.classList.add('button-level');
+    buttonEasy.classList.add('button-level', 'easy');
     buttonEasy.textContent = 'Easy';
     buttonEasy.addEventListener('click', () => {
       this.easy = true;
@@ -56,7 +55,7 @@ class Keyboard {
     });
 
     const buttonMedium = document.createElement('button');
-    buttonMedium.classList.add('button-level');
+    buttonMedium.classList.add('button-level', 'medium');
     buttonMedium.textContent = 'Medium';
     buttonMedium.addEventListener('click', () => {
       this.easy = false;
@@ -68,7 +67,7 @@ class Keyboard {
     });
 
     const buttonHard = document.createElement('button');
-    buttonHard.classList.add('button-level');
+    buttonHard.classList.add('button-level', 'hard');
     buttonHard.textContent = 'Hard';
     buttonHard.addEventListener('click', () => {
       this.easy = false;
@@ -153,8 +152,9 @@ class Keyboard {
     button.textContent = 'Start';
     button.addEventListener('click', () => {
       button.classList.add('hidden');
+      checkCurrentLevel(this.easy, this.medium, this.hard);
       for (let i = 0; i < this.currentLetters; i += 1) {
-        this.arrayLetters.push(getRandomNumberInRange(0, 9));
+        this.arrayLetters.push(getRandomNumberInRange(0, 36));
       }
       const currentButtons = document.querySelectorAll('.button');
       currentButtons.forEach((button) => {
@@ -162,23 +162,14 @@ class Keyboard {
           this.tempArray.push(button);
         }
       });
+      console.log(this.arrayLetters, this.tempArray);
       generatePauseBetweenButtons(
         this.arrayLetters,
         this.tempArray,
         this.arrayToShowInConsole,
       );
       setTimeout(() => {
-        document.querySelector('.sequence-button').disabled = false;
-        const input = document.querySelector('.text-input');
-        document
-          .querySelectorAll('.button')
-          .forEach((button) => (button.disabled = false));
-        input.disabled = false;
-        input.focus();
-        input.setAttribute('placeholder', 'Enter the answer');
-        input.setAttribute('maxlength', `${this.currentLetters}`);
-        console.log(this.arrayLetters, this.tempArray);
-        console.log(this.arrayToShowInConsole);
+        prepareInputToEnter(false, this.currentLetters);
       }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
@@ -197,6 +188,9 @@ class Keyboard {
         this.tempArray,
         // this.arrayToShowInConsole,
       );
+      setTimeout(() => {
+        prepareInputToEnter(false, this.currentLetters, true);
+      }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
   }
@@ -227,6 +221,17 @@ class Keyboard {
     }
     if (letterToCheck === copyArray.join('')) {
       alert('You win');
+      this.arrayToShowInConsole.length = 0;
+      this.arrayLetters.length = 0;
+      this.tempArray.length = 0;
+      this.currentLetters += 2;
+      this.round += 1;
+      clearInputFromText();
+      this.changeRound();
+      document.querySelector('.start-button').classList.remove('hidden');
+      if (this.currentLetters > 10) {
+        this.currentLetters = 2;
+      }
     }
     console.log(copyArray, letterToCheck);
   }
@@ -279,4 +284,32 @@ function forbiddenEditInput(event) {
 function clearInputFromText() {
   const input = document.querySelector('.text-input');
   input.value = '';
+}
+
+function prepareInputToEnter(bool, figure, bool2 = false) {
+  document.querySelector('.sequence-button').disabled = bool2;
+  const input = document.querySelector('.text-input');
+  document
+    .querySelectorAll('.button')
+    .forEach((button) => (button.disabled = bool));
+  input.disabled = bool;
+  input.focus();
+  input.setAttribute('placeholder', 'Enter the answer');
+  input.setAttribute('maxlength', figure);
+}
+
+function checkCurrentLevel(easy, medium, hard) {
+  if (easy) {
+    document.querySelector('.easy').disabled = false;
+    document.querySelector('.medium').disabled = true;
+    document.querySelector('.hard').disabled = true;
+  } else if (medium) {
+    document.querySelector('.easy').disabled = true;
+    document.querySelector('.medium').disabled = false;
+    document.querySelector('.hard').disabled = true;
+  } else if (hard) {
+    document.querySelector('.easy').disabled = true;
+    document.querySelector('.medium').disabled = true;
+    document.querySelector('.hard').disabled = false;
+  }
 }
