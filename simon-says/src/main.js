@@ -13,6 +13,7 @@ class Keyboard {
   tempArray = [];
   currentLetters = 6;
   totalButtons = 10;
+  arrayToShowInConsole = [];
 
   constructor(arr) {
     this.arr = arr;
@@ -90,6 +91,9 @@ class Keyboard {
     const input = document.createElement('input');
     input.classList.add('text-input');
     input.disabled = true;
+    input.addEventListener('input', (event) => {
+      this.handlerToWinOrLose();
+    });
 
     const round = document.createElement('p');
     round.classList.add('round');
@@ -158,7 +162,11 @@ class Keyboard {
           this.tempArray.push(button);
         }
       });
-      generatePauseBetweenButtons(this.arrayLetters, this.tempArray);
+      generatePauseBetweenButtons(
+        this.arrayLetters,
+        this.tempArray,
+        this.arrayToShowInConsole,
+      );
       setTimeout(() => {
         document.querySelector('.sequence-button').disabled = false;
         const input = document.querySelector('.text-input');
@@ -170,6 +178,7 @@ class Keyboard {
         input.setAttribute('placeholder', 'Enter the answer');
         input.setAttribute('maxlength', `${this.currentLetters}`);
         console.log(this.arrayLetters, this.tempArray);
+        console.log(this.arrayToShowInConsole);
       }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
@@ -182,7 +191,12 @@ class Keyboard {
     button.disabled = true;
     button.addEventListener('click', () => {
       button.disabled = true;
-      generatePauseBetweenButtons(this.arrayLetters, this.tempArray);
+      clearInputFromText();
+      generatePauseBetweenButtons(
+        this.arrayLetters,
+        this.tempArray,
+        // this.arrayToShowInConsole,
+      );
     });
     this.keyboardTwo.append(button);
   }
@@ -201,6 +215,21 @@ class Keyboard {
       });
     });
   }
+
+  handlerToWinOrLose() {
+    const input = document.querySelector('.text-input');
+    const letterToCheck = input.value; // то что вводит пользователь например 7589
+    const copyArray = this.arrayToShowInConsole; // массив с которым сверяем
+    const index = letterToCheck.length; // длина введенного значения
+    const letter = letterToCheck[letterToCheck.length - 1]; // последний символ введенного значения
+    if (copyArray[index - 1] !== letter) {
+      alert('You loose');
+    }
+    if (letterToCheck === copyArray.join('')) {
+      alert('You win');
+    }
+    console.log(copyArray, letterToCheck);
+  }
 }
 
 const keyboard = new Keyboard();
@@ -215,11 +244,12 @@ function initialGame() {
 }
 initialGame();
 
-function generatePauseBetweenButtons(arr1, arr2) {
+function generatePauseBetweenButtons(arr1, arr2, arr3 = []) {
   for (let i = 0; i < arr1.length; i += 1) {
     for (let j = 0; j < arr2.length; j += 1) {
       if (arr1[i].toString() === arr2[j].textContent) {
         setTimeout(() => {
+          arr3.push(arr2[j].textContent);
           arr2[j].classList.add('active');
           setTimeout(() => {
             arr2[j].classList.remove('active');
@@ -244,4 +274,9 @@ function forbiddenEditInput(event) {
       event.preventDefault();
     }
   }
+}
+
+function clearInputFromText() {
+  const input = document.querySelector('.text-input');
+  input.value = '';
 }
