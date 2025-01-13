@@ -6,6 +6,7 @@ import { getRandomNumberInRange } from './modules/generateRandomNum';
 
 class Keyboard {
   round = 1;
+  attempts = 0;
   easy = true;
   medium = false;
   hard = false;
@@ -41,6 +42,17 @@ class Keyboard {
     const newGame = document.createElement('button');
     newGame.classList.add('button-new-game');
     newGame.textContent = 'New Game';
+    newGame.addEventListener('click', () => {
+      this.round = 1;
+      this.attempts = 0;
+      this.arrayLetters = [];
+      this.tempArray = [];
+      this.currentLetters = 2;
+      this.totalButtons = 10;
+      this.arrayToShowInConsole = [];
+      prepareForNewGame();
+      this.changeRound();
+    });
 
     const buttonEasy = document.createElement('button');
     buttonEasy.classList.add('button-level', 'easy');
@@ -152,6 +164,7 @@ class Keyboard {
     button.classList.add('start-button');
     button.textContent = 'Start';
     button.addEventListener('click', () => {
+      document.querySelector('.button-new-game').disabled = true;
       button.classList.add('hidden');
       checkCurrentLevel(this.easy, this.medium, this.hard);
       loopForCheckButtons(
@@ -161,12 +174,7 @@ class Keyboard {
         this.arrayLetters,
         this.currentLetters,
       );
-      const currentButtons = document.querySelectorAll('.button');
-      currentButtons.forEach((button) => {
-        if (!button.classList.contains('hidden')) {
-          this.tempArray.push(button);
-        }
-      });
+      getCurrentArrayButtons(this.tempArray);
       console.log(this.arrayLetters, this.tempArray);
       generatePauseBetweenButtons(
         this.arrayLetters,
@@ -175,6 +183,7 @@ class Keyboard {
       );
       setTimeout(() => {
         prepareInputToEnter(false, this.currentLetters);
+        document.querySelector('.button-new-game').disabled = false;
       }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
@@ -187,6 +196,7 @@ class Keyboard {
     button.textContent = 'Repeat Sequence';
     button.disabled = true;
     button.addEventListener('click', () => {
+      document.querySelector('.button-new-game').disabled = true;
       input.disabled = true;
       document
         .querySelectorAll('.button')
@@ -200,6 +210,7 @@ class Keyboard {
       );
       setTimeout(() => {
         prepareInputToEnter(false, this.currentLetters, true);
+        document.querySelector('.button-new-game').disabled = false;
       }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
@@ -210,6 +221,7 @@ class Keyboard {
     button.classList.add('next-button', 'hidden');
     button.textContent = 'Next';
     button.addEventListener('click', () => {
+      document.querySelector('.button-new-game').disabled = true;
       document.querySelector('.sequence-button').classList.remove('hidden');
       button.classList.add('hidden');
       checkCurrentLevel(this.easy, this.medium, this.hard);
@@ -220,12 +232,7 @@ class Keyboard {
         this.arrayLetters,
         this.currentLetters,
       );
-      const currentButtons = document.querySelectorAll('.button');
-      currentButtons.forEach((button) => {
-        if (!button.classList.contains('hidden')) {
-          this.tempArray.push(button);
-        }
-      });
+      getCurrentArrayButtons(this.tempArray);
       console.log(this.arrayLetters, this.tempArray);
       generatePauseBetweenButtons(
         this.arrayLetters,
@@ -234,6 +241,7 @@ class Keyboard {
       );
       setTimeout(() => {
         prepareInputToEnter(false, this.currentLetters);
+        document.querySelector('.button-new-game').disabled = false;
       }, this.currentLetters * 1000);
     });
     this.keyboardTwo.append(button);
@@ -262,14 +270,23 @@ class Keyboard {
     const index = letterToCheck.length; // длина введенного значения
     const letter = letterToCheck[letterToCheck.length - 1]; // последний символ введенного значения
     if (copyArray[index - 1] !== letter) {
-      alert('You loose');
+      this.attempts += 1;
+      if (this.attempts > 1) {
+        alert('Game Over.');
+        this.attempts = 0;
+      } else {
+        alert('It is wrong. You can try once again.');
+      }
+      input.disabled = true;
+      this.tempArray.forEach((button) => (button.disabled = true));
     }
     if (letterToCheck === copyArray.join('')) {
       this.round += 1;
       if (this.round > 5) {
         alert('You are the Champion');
       }
-      alert('You win');
+      alert('You win this round');
+      this.tempArray.forEach((button) => (button.disabled = true));
       input.disabled = true;
       this.arrayToShowInConsole.length = 0;
       this.arrayLetters.length = 0;
@@ -405,4 +422,26 @@ function checkForbiddenSymbolsToInput(array) {
   if (!isValid) {
     input.value = value.slice(0, -1);
   }
+}
+
+function getCurrentArrayButtons(array) {
+  const currentButtons = document.querySelectorAll('.button');
+  currentButtons.forEach((button) => {
+    if (!button.classList.contains('hidden')) {
+      array.push(button);
+    }
+  });
+}
+
+function prepareForNewGame() {
+  document.querySelector('.next-button').classList.add('hidden');
+  document.querySelector('.start-button').classList.remove('hidden');
+  document.querySelector('.sequence-button').classList.remove('hidden');
+  document.querySelector('.sequence-button').disabled = true;
+  document.querySelector('.easy').disabled = false;
+  document.querySelector('.medium').disabled = false;
+  document.querySelector('.hard').disabled = false;
+  document
+    .querySelectorAll('.button')
+    .forEach((button) => (button.disabled = true));
 }

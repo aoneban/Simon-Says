@@ -126,7 +126,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #c4dc7d !important;
+  background: #c4dc7d!important;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -135,6 +135,7 @@ button:hover {
 }
 
 button:disabled {
+  background: #cbde97;
   cursor: not-allowed;
   border: none;
 }
