@@ -41,7 +41,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -75,7 +74,7 @@ body {
 }
 
 .text-input {
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   text-transform: uppercase;
   border-radius: 4px;
   padding: 10px;
@@ -92,7 +91,7 @@ body {
 }
 
 .active {
-  background-color: rgb(83, 147, 147)!important;
+  background-color: rgb(83, 147, 147) !important;
   border-radius: 20%;
   border: none;
   color: white;
@@ -116,6 +115,11 @@ body {
   justify-content: center;
 }
 
+.wrapper-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
 button {
   border-radius: 8px;
   text-transform: uppercase;
@@ -126,7 +130,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background: #c4dc7d!important;
+  background: #c4dc7d !important;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -135,7 +139,7 @@ button:hover {
 }
 
 button:disabled {
-  border: 1px solid rgb(111, 32, 32)!important;
+  border: 1px solid rgb(111, 32, 32) !important;
   color: rgb(111, 32, 32);
   background: #cbde97;
   cursor: not-allowed;
@@ -166,11 +170,13 @@ button:disabled {
   padding: 0;
   border: 1px solid #888;
   width: 80%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
 }
 
 .content-message {
@@ -179,13 +185,25 @@ button:disabled {
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0} 
-  to {top:0; opacity:1}
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
 }
 
 @keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
 }
 
 /* The Close Button */
@@ -212,7 +230,9 @@ button:disabled {
   color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+  padding: 2px 16px;
+}
 
 .modal-footer {
   padding: 2px 16px;
@@ -230,5 +250,51 @@ button:disabled {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 730px) {
+  .button {
+    min-width: 35px;
+  }
+}
+
+@media (max-width: 680px) {
+  .button {
+    min-width: 33px;
+  }
+}
+
+@media (max-width: 620px) {
+  .button {
+    min-width: 31px;
+    padding: 0.6em;
+    margin: 4px;
+  }
+
+  .greetings {
+    font-size: 1.8rem;
+  }
+
+  .keyboard-wrapper {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .button-level {
+    min-width: 31px;
+    padding: 0.6em;
+    margin: 4px;
+  }
+
+  .button {
+    min-width: 28px;
+    padding: 0.3em;
+    margin: 2.5px;
+  }
+
+  .greetings {
+    font-size: 1.3rem;
   }
 }

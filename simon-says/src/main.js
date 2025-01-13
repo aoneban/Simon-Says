@@ -26,7 +26,7 @@ class Keyboard {
     const bodyElement = document.getElementById('app');
     const greetings = document.createElement('h1');
     greetings.classList.add('greetings');
-    greetings.textContent = 'Welcome to the game "Simon says"';
+    greetings.textContent = 'Welcome to the "Simon says"';
     bodyElement.append(greetings);
   }
 
@@ -40,7 +40,7 @@ class Keyboard {
     wrapperButtons.classList.add('wrapper-buttons');
 
     const newGame = document.createElement('button');
-    newGame.classList.add('button-new-game');
+    newGame.classList.add('button-level', 'button-new-game');
     newGame.textContent = 'New Game';
     newGame.addEventListener('click', () => {
       this.round = 1;
@@ -118,13 +118,21 @@ class Keyboard {
       if (event.target.classList.contains('button')) {
         const input = document.querySelector('.text-input');
         input.value += event.target.textContent;
-        console.log('Это: ', input.value);
-        event.target.classList.add('active');
-        setTimeout(() => {
-          event.target.classList.remove('active');
-        }, 200);
+        this.handleInput.call(
+          this,
+          input,
+          this.arrayToShowInConsole,
+          this.tempArray,
+          () => {
+            event.target.classList.add('active');
+            setTimeout(() => {
+              event.target.classList.remove('active');
+            }, 200);
+          },
+        );
       }
     });
+
     bodyElement.append(keyboardWrapper);
 
     this.keyboardOne = document.createElement('div');
@@ -266,10 +274,21 @@ class Keyboard {
   handlerToWinOrLose() {
     checkForbiddenSymbolsToInput(this.tempArray);
     const input = document.querySelector('.text-input');
-    const letterToCheck = input.value; // то что вводит пользователь например 7589
-    const copyArray = this.arrayToShowInConsole; // массив с которым сверяем
-    const index = letterToCheck.length; // длина введенного значения
-    const letter = letterToCheck[letterToCheck.length - 1]; // последний символ введенного значения
+    this.handleInput.call(
+      this,
+      input,
+      this.arrayToShowInConsole,
+      this.tempArray,
+      null,
+    );
+  }
+
+  handleInput(input, arrayToShowInConsole, tempArray, callback) {
+    const letterToCheck = input.value;
+    const copyArray = arrayToShowInConsole;
+    const index = letterToCheck.length;
+    const letter = letterToCheck[letterToCheck.length - 1];
+
     if (copyArray[index - 1] !== letter) {
       this.attempts += 1;
       if (this.attempts > 1) {
@@ -282,10 +301,13 @@ class Keyboard {
         );
       }
       input.disabled = true;
-      this.tempArray.forEach((button) => (button.disabled = true));
+      tempArray.forEach((button) => (button.disabled = true));
+      return;
     }
+
     if (letterToCheck === copyArray.join('')) {
       this.round += 1;
+      this.attempts = 0;
       if (this.round > 5) {
         modalResponses('You are the Champion', true);
         this.round = 1;
@@ -294,11 +316,11 @@ class Keyboard {
         document.querySelector('.sequence-button').disabled = true;
       } else {
         modalResponses('You win this round', true);
-        this.tempArray.forEach((button) => (button.disabled = true));
+        tempArray.forEach((button) => (button.disabled = true));
         input.disabled = true;
-        this.arrayToShowInConsole.length = 0;
+        arrayToShowInConsole.length = 0;
         this.arrayLetters.length = 0;
-        this.tempArray.length = 0;
+        tempArray.length = 0;
         this.currentLetters += 2;
         clearInputFromText();
         this.changeRound();
@@ -306,7 +328,9 @@ class Keyboard {
         document.querySelector('.sequence-button').classList.add('hidden');
       }
     }
+
     console.log(copyArray, letterToCheck);
+    if (callback) callback();
   }
 }
 
