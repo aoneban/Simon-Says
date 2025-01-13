@@ -7,11 +7,11 @@ export default defineConfig({
     minify: false,
     sourcemap: true,
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "@/styles.scss";`,
-      },
-    },
-  },
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@import "@/styles.scss";`,
+  //     },
+  //   },
+  // },
 });

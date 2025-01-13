@@ -1,4 +1,4 @@
-import './styles.scss';
+import './styles.css';
 import { buttonNumbers, buttonLetters } from './data';
 import removeClass from './modules/removeClass';
 import addHiddenClass from './modules/addClass';
