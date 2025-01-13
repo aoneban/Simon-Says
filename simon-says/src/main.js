@@ -182,10 +182,15 @@ class Keyboard {
 
   createSequenceButton() {
     const button = document.createElement('button');
+    const input = document.querySelector('.text-input');
     button.classList.add('sequence-button');
     button.textContent = 'Repeat Sequence';
     button.disabled = true;
     button.addEventListener('click', () => {
+      input.disabled = true;
+      document
+        .querySelectorAll('.button')
+        .forEach((button) => (button.disabled = true));
       button.disabled = true;
       clearInputFromText();
       generatePauseBetweenButtons(
@@ -205,6 +210,7 @@ class Keyboard {
     button.classList.add('next-button', 'hidden');
     button.textContent = 'Next';
     button.addEventListener('click', () => {
+      document.querySelector('.sequence-button').classList.remove('hidden');
       button.classList.add('hidden');
       checkCurrentLevel(this.easy, this.medium, this.hard);
       loopForCheckButtons(
@@ -249,6 +255,7 @@ class Keyboard {
   }
 
   handlerToWinOrLose() {
+    checkForbiddenSymbolsToInput(this.tempArray);
     const input = document.querySelector('.text-input');
     const letterToCheck = input.value; // то что вводит пользователь например 7589
     const copyArray = this.arrayToShowInConsole; // массив с которым сверяем
@@ -258,18 +265,20 @@ class Keyboard {
       alert('You loose');
     }
     if (letterToCheck === copyArray.join('')) {
+      this.round += 1;
+      if (this.round > 5) {
+        alert('You are the Champion');
+      }
       alert('You win');
+      input.disabled = true;
       this.arrayToShowInConsole.length = 0;
       this.arrayLetters.length = 0;
       this.tempArray.length = 0;
       this.currentLetters += 2;
-      this.round += 1;
       clearInputFromText();
       this.changeRound();
       document.querySelector('.next-button').classList.remove('hidden');
-      if (this.currentLetters > 10) {
-        this.currentLetters = 2;
-      }
+      document.querySelector('.sequence-button').classList.add('hidden');
     }
     console.log(copyArray, letterToCheck);
   }
@@ -376,5 +385,24 @@ function loopForCheckButtons(easy, medium, hard, array, letters) {
       }
     }
     array.push(randomIndex);
+  }
+}
+
+function checkForbiddenSymbolsToInput(array) {
+  const input = document.querySelector('.text-input');
+  const value = input.value;
+  let isValid = true;
+  for (let i = 0; i < value.length; i++) {
+    const char = value.charAt(i).toUpperCase();
+    const isCharValid = array.some(
+      (letter) => letter.textContent.toUpperCase() === char,
+    );
+    if (!isCharValid) {
+      isValid = false;
+      break;
+    }
+  }
+  if (!isValid) {
+    input.value = value.slice(0, -1);
   }
 }
