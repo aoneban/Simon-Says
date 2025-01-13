@@ -200,6 +200,39 @@ class Keyboard {
     this.keyboardTwo.append(button);
   }
 
+  createNextButton() {
+    const button = document.createElement('button');
+    button.classList.add('next-button', 'hidden');
+    button.textContent = 'Next';
+    button.addEventListener('click', () => {
+      button.classList.add('hidden');
+      checkCurrentLevel(this.easy, this.medium, this.hard);
+      loopForCheckButtons(
+        this.easy,
+        this.medium,
+        this.hard,
+        this.arrayLetters,
+        this.currentLetters,
+      );
+      const currentButtons = document.querySelectorAll('.button');
+      currentButtons.forEach((button) => {
+        if (!button.classList.contains('hidden')) {
+          this.tempArray.push(button);
+        }
+      });
+      console.log(this.arrayLetters, this.tempArray);
+      generatePauseBetweenButtons(
+        this.arrayLetters,
+        this.tempArray,
+        this.arrayToShowInConsole,
+      );
+      setTimeout(() => {
+        prepareInputToEnter(false, this.currentLetters);
+      }, this.currentLetters * 1000);
+    });
+    this.keyboardTwo.append(button);
+  }
+
   keydownHandler() {
     document.addEventListener('keydown', (event) => {
       forbiddenEditInput(event);
@@ -233,7 +266,7 @@ class Keyboard {
       this.round += 1;
       clearInputFromText();
       this.changeRound();
-      document.querySelector('.start-button').classList.remove('hidden');
+      document.querySelector('.next-button').classList.remove('hidden');
       if (this.currentLetters > 10) {
         this.currentLetters = 2;
       }
@@ -250,6 +283,7 @@ function initialGame() {
   keyboard.createKeyboardLetters(buttonLetters);
   keyboard.createStartButton();
   keyboard.createSequenceButton();
+  keyboard.createNextButton();
   keyboard.keydownHandler();
 }
 initialGame();
@@ -321,7 +355,6 @@ function checkCurrentLevel(easy, medium, hard) {
   } else if (hard) {
     document.querySelector('.easy').disabled = true;
     document.querySelector('.medium').disabled = true;
-    document.querySelector('.hard').disabled = false;
     document.querySelector('.hard').disabled = false;
   }
 }
