@@ -204,6 +204,7 @@ class Keyboard {
     button.textContent = 'Repeat Sequence';
     button.disabled = true;
     button.addEventListener('click', () => {
+      this.attempts += 1;
       removeModalWindow();
       document.querySelector('.button-new-game').disabled = true;
       input.disabled = true;

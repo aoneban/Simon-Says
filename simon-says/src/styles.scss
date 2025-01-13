@@ -42,10 +42,17 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   text-align: center;
+  background-image: url('/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
 }
 
 .round {
   font-size: 1.5em;
+  font-weight: 600;
 }
 
 .logo {
@@ -78,7 +85,8 @@ body {
   text-transform: uppercase;
   border-radius: 4px;
   padding: 10px;
-  font-size: 16px;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: #333;
   outline: none;
   transition:
@@ -104,7 +112,7 @@ body {
   margin: 1em auto;
   border-radius: 10px;
   border: 1px solid #ccc;
-  background-color: #f7eded;
+  background-color: rgb(198 180 232 / 50%);
   padding: 10px;
   min-height: 360px;
 }
