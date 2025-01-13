@@ -70,6 +70,7 @@ class Keyboard {
     buttonMedium.classList.add('button-level', 'medium');
     buttonMedium.textContent = 'Medium';
     buttonMedium.addEventListener('click', () => {
+      disabledButtons();
       this.easy = false;
       this.medium = true;
       this.hard = false;
@@ -82,6 +83,7 @@ class Keyboard {
     buttonHard.classList.add('button-level', 'hard');
     buttonHard.textContent = 'Hard';
     buttonHard.addEventListener('click', () => {
+      disabledButtons();
       this.easy = false;
       this.medium = false;
       this.hard = true;
@@ -524,4 +526,9 @@ function removeModalWindow() {
   if (document.getElementById('myModal')) {
     document.getElementById('myModal').remove();
   }
+}
+
+function disabledButtons() {
+  const buttons = document.querySelectorAll('.button');
+  buttons.forEach((button) => (button.disabled = true));
 }
