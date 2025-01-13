@@ -196,6 +196,7 @@ class Keyboard {
     button.textContent = 'Repeat Sequence';
     button.disabled = true;
     button.addEventListener('click', () => {
+      removeModalWindow();
       document.querySelector('.button-new-game').disabled = true;
       input.disabled = true;
       document
@@ -272,10 +273,13 @@ class Keyboard {
     if (copyArray[index - 1] !== letter) {
       this.attempts += 1;
       if (this.attempts > 1) {
-        alert('Game Over.');
+        modalResponses('Game Over', false);
         this.attempts = 0;
       } else {
-        alert('It is wrong. You can try once again.');
+        modalResponses(
+          'It is wrong. You can try once again. Press: Repeat Sequence',
+          false,
+        );
       }
       input.disabled = true;
       this.tempArray.forEach((button) => (button.disabled = true));
@@ -283,19 +287,24 @@ class Keyboard {
     if (letterToCheck === copyArray.join('')) {
       this.round += 1;
       if (this.round > 5) {
-        alert('You are the Champion');
+        modalResponses('You are the Champion', true);
+        this.round = 1;
+        document.querySelector('.next-button').classList.add('hidden');
+        document.querySelector('.sequence-button').classList.remove('hidden');
+        document.querySelector('.sequence-button').disabled = true;
+      } else {
+        modalResponses('You win this round', true);
+        this.tempArray.forEach((button) => (button.disabled = true));
+        input.disabled = true;
+        this.arrayToShowInConsole.length = 0;
+        this.arrayLetters.length = 0;
+        this.tempArray.length = 0;
+        this.currentLetters += 2;
+        clearInputFromText();
+        this.changeRound();
+        document.querySelector('.next-button').classList.remove('hidden');
+        document.querySelector('.sequence-button').classList.add('hidden');
       }
-      alert('You win this round');
-      this.tempArray.forEach((button) => (button.disabled = true));
-      input.disabled = true;
-      this.arrayToShowInConsole.length = 0;
-      this.arrayLetters.length = 0;
-      this.tempArray.length = 0;
-      this.currentLetters += 2;
-      clearInputFromText();
-      this.changeRound();
-      document.querySelector('.next-button').classList.remove('hidden');
-      document.querySelector('.sequence-button').classList.add('hidden');
     }
     console.log(copyArray, letterToCheck);
   }
@@ -434,6 +443,9 @@ function getCurrentArrayButtons(array) {
 }
 
 function prepareForNewGame() {
+  const input = document.querySelector('.text-input');
+  input.value = '';
+  input.disabled = true;
   document.querySelector('.next-button').classList.add('hidden');
   document.querySelector('.start-button').classList.remove('hidden');
   document.querySelector('.sequence-button').classList.remove('hidden');
@@ -444,4 +456,48 @@ function prepareForNewGame() {
   document
     .querySelectorAll('.button')
     .forEach((button) => (button.disabled = true));
+}
+
+function modalResponses(res, withTimeout = false) {
+  const body = document.body;
+
+  const modal = document.createElement('div');
+  modal.setAttribute('id', 'myModal');
+  modal.classList.add('modal');
+  modal.style.display = 'block';
+
+  const content = document.createElement('div');
+  content.classList.add('modal-content');
+
+  const modalBody = document.createElement('div');
+  modalBody.classList.add('modal-body');
+
+  const message = document.createElement('p');
+  message.classList.add('content-message');
+  message.textContent = res;
+
+  const span = document.createElement('span');
+  span.classList.add('close');
+  span.innerHTML = '&times;';
+  span.addEventListener('click', function () {
+    modal.remove();
+  });
+
+  modalBody.append(message, span);
+  content.append(modalBody);
+  modal.append(content);
+  body.append(modal);
+
+  if (withTimeout) {
+    setTimeout(() => {
+      modal.remove();
+    }, 3000);
+  }
+  return body;
+}
+
+function removeModalWindow() {
+  if (document.getElementById('myModal')) {
+    document.getElementById('myModal').remove();
+  }
 }
