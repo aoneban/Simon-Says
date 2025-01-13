@@ -310,7 +310,7 @@ class Keyboard {
       this.round += 1;
       this.attempts = 0;
       if (this.round > 5) {
-        modalResponses('You are the Champion', true);
+        modalResponses('You are the Champion! Game Over.', true);
         this.round = 1;
         document.querySelector('.next-button').classList.add('hidden');
         document.querySelector('.sequence-button').classList.remove('hidden');
