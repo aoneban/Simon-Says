@@ -183,7 +183,7 @@ class Keyboard {
         this.currentLetters,
       );
       getCurrentArrayButtons(this.tempArray);
-      console.log(this.arrayLetters, this.tempArray);
+      console.log(this.arrayLetters);
       generatePauseBetweenButtons(
         this.arrayLetters,
         this.tempArray,
@@ -243,7 +243,7 @@ class Keyboard {
         this.currentLetters,
       );
       getCurrentArrayButtons(this.tempArray);
-      console.log(this.arrayLetters, this.tempArray);
+      console.log(this.arrayLetters);
       generatePauseBetweenButtons(
         this.arrayLetters,
         this.tempArray,
@@ -330,7 +330,6 @@ class Keyboard {
       }
     }
 
-    console.log(copyArray, letterToCheck);
     if (callback) callback();
   }
 }
