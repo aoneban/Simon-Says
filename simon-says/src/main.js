@@ -287,7 +287,7 @@ class Keyboard {
   }
 
   handleInput(input, arrayToShowInConsole, tempArray, callback) {
-    const letterToCheck = input.value;
+    const letterToCheck = input.value.toLowerCase();
     const copyArray = arrayToShowInConsole;
     const index = letterToCheck.length;
     const letter = letterToCheck[letterToCheck.length - 1];

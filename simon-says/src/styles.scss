@@ -85,6 +85,7 @@ body {
   border: 1px solid #ccc;
   text-transform: uppercase;
   border-radius: 4px;
+  background-color: #ecefe2;
   padding: 10px;
   font-size: 1.5rem;
   font-weight: 600;
@@ -95,6 +96,8 @@ body {
     box-shadow 0.3s;
 }
 .text-input:focus {
+  color: #333;
+  background-color: #ecefe2;
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
@@ -192,6 +195,9 @@ button:disabled {
   padding: 20px 0;
 }
 
+.content-message {
+  color: #242424;
+}
 /* Add Animation */
 @-webkit-keyframes animatetop {
   from {
@@ -233,20 +239,8 @@ button:disabled {
   cursor: pointer;
 }
 
-.modal-header {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
-}
-
 .modal-body {
   padding: 2px 16px;
-}
-
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
 }
 
 @media (prefers-color-scheme: light) {
