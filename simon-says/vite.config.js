@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import eslintPlugin from 'vite-plugin-eslint';
+import path from 'path';
 
 export default defineConfig({
   plugins: [eslintPlugin()],
@@ -7,11 +8,9 @@ export default defineConfig({
     minify: false,
     sourcemap: true,
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "@/styles.scss";`,
-      },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
   },
 });
