@@ -40,7 +40,7 @@ class Keyboard {
     wrapperButtons.classList.add('wrapper-buttons');
 
     const newGame = document.createElement('button');
-    newGame.classList.add('button-level', 'button-new-game');
+    newGame.classList.add('button-level', 'button-new-game', 'hidden');
     newGame.textContent = 'New Game';
     newGame.addEventListener('click', () => {
       this.round = 1;
@@ -102,14 +102,14 @@ class Keyboard {
     this.createLevelButtons();
 
     const input = document.createElement('input');
-    input.classList.add('text-input');
+    input.classList.add('text-input', 'hidden');
     input.disabled = true;
     input.addEventListener('input', (event) => {
       this.handlerToWinOrLose();
     });
 
     const round = document.createElement('p');
-    round.classList.add('round');
+    round.classList.add('round', 'hidden');
     round.textContent = `Round: ${this.round}/5`;
     bodyElement.append(round, input);
 
@@ -169,32 +169,41 @@ class Keyboard {
     }
   }
 
+  showElements() {
+    document.querySelector('.text-input').classList.remove('hidden');
+    document.querySelector('.round').classList.remove('hidden');
+    document.querySelector('.button-new-game').classList.remove('hidden');
+    document.querySelector('.button-new-game').disabled = true;
+  }
+
   createStartButton() {
     const button = document.createElement('button');
     button.classList.add('start-button');
     button.textContent = 'Start';
     button.addEventListener('click', () => {
-      document.querySelector('.button-new-game').disabled = true;
+      this.showElements();
       button.classList.add('hidden');
-      checkCurrentLevel(this.easy, this.medium, this.hard);
-      loopForCheckButtons(
-        this.easy,
-        this.medium,
-        this.hard,
-        this.arrayLetters,
-        this.currentLetters,
-      );
-      getCurrentArrayButtons(this.tempArray);
-      console.log(this.arrayLetters);
-      generatePauseBetweenButtons(
-        this.arrayLetters,
-        this.tempArray,
-        this.arrayToShowInConsole,
-      );
       setTimeout(() => {
-        prepareInputToEnter(false, this.currentLetters);
-        document.querySelector('.button-new-game').disabled = false;
-      }, this.currentLetters * 1000);
+        checkCurrentLevel(this.easy, this.medium, this.hard);
+        loopForCheckButtons(
+          this.easy,
+          this.medium,
+          this.hard,
+          this.arrayLetters,
+          this.currentLetters,
+        );
+        getCurrentArrayButtons(this.tempArray);
+        console.log(this.arrayLetters);
+        generatePauseBetweenButtons(
+          this.arrayLetters,
+          this.tempArray,
+          this.arrayToShowInConsole,
+        );
+        setTimeout(() => {
+          prepareInputToEnter(false, this.currentLetters);
+          document.querySelector('.button-new-game').disabled = false;
+        }, this.currentLetters * 1000);
+      }, 1000);
     });
     this.keyboardTwo.append(button);
   }
