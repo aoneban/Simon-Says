@@ -70,26 +70,30 @@ class Keyboard {
     buttonMedium.classList.add('button-level', 'medium');
     buttonMedium.textContent = 'Medium';
     buttonMedium.addEventListener('click', () => {
-      disabledButtons();
-      this.easy = false;
-      this.medium = true;
-      this.hard = false;
-      this.changeRound();
-      addHiddenClass('hidden', 'figure');
-      removeClass('hidden', 'letter');
+      if (this.round === 1) {
+        disabledButtons();
+        this.easy = false;
+        this.medium = true;
+        this.hard = false;
+        this.changeRound();
+        addHiddenClass('hidden', 'figure');
+        removeClass('hidden', 'letter');
+      }
     });
 
     const buttonHard = document.createElement('button');
     buttonHard.classList.add('button-level', 'hard');
     buttonHard.textContent = 'Hard';
     buttonHard.addEventListener('click', () => {
-      disabledButtons();
-      this.easy = false;
-      this.medium = false;
-      this.hard = true;
-      this.changeRound();
-      removeClass('hidden', 'letter');
-      removeClass('hidden', 'figure');
+      if (this.round === 1) {
+        disabledButtons();
+        this.easy = false;
+        this.medium = false;
+        this.hard = true;
+        this.changeRound();
+        removeClass('hidden', 'letter');
+        removeClass('hidden', 'figure');
+      }
     });
 
     wrapperButtons.append(newGame, buttonEasy, buttonMedium, buttonHard);
