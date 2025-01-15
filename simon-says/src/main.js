@@ -317,7 +317,7 @@ class Keyboard {
           false,
         );
       }
-      disableInput(this.tempArray, input);
+      disableInput(this.tempArray);
       return;
     }
 
@@ -328,13 +328,13 @@ class Keyboard {
         modalResponses('You are the Champion! Game Over.', true);
         this.round = 1;
         input.value = '';
-        disableInput(this.tempArray, input);
+        disableInput(this.tempArray);
         document.querySelector('.next-button').classList.add('hidden');
         document.querySelector('.sequence-button').classList.remove('hidden');
         document.querySelector('.sequence-button').disabled = true;
       } else {
         modalResponses('You win this round', true);
-        disableInput(this.tempArray, input);
+        disableInput(this.tempArray);
         arrayToShowInConsole.length = 0;
         this.arrayLetters.length = 0;
         tempArray.length = 0;
@@ -547,7 +547,8 @@ function disabledButtons() {
   buttons.forEach((button) => (button.disabled = true));
 }
 
-function disableInput(array, input) {
+function disableInput(array) {
+  const input = document.querySelector('.text-input');
   input.disabled = true;
   array.forEach((button) => (button.disabled = true));
 }
