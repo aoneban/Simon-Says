@@ -317,8 +317,7 @@ class Keyboard {
           false,
         );
       }
-      input.disabled = true;
-      tempArray.forEach((button) => (button.disabled = true));
+      disableInput(this.tempArray, input);
       return;
     }
 
@@ -328,13 +327,14 @@ class Keyboard {
       if (this.round > 5) {
         modalResponses('You are the Champion! Game Over.', true);
         this.round = 1;
+        input.value = '';
+        disableInput(this.tempArray, input);
         document.querySelector('.next-button').classList.add('hidden');
         document.querySelector('.sequence-button').classList.remove('hidden');
         document.querySelector('.sequence-button').disabled = true;
       } else {
         modalResponses('You win this round', true);
-        tempArray.forEach((button) => (button.disabled = true));
-        input.disabled = true;
+        disableInput(this.tempArray, input);
         arrayToShowInConsole.length = 0;
         this.arrayLetters.length = 0;
         tempArray.length = 0;
@@ -545,4 +545,9 @@ function removeModalWindow() {
 function disabledButtons() {
   const buttons = document.querySelectorAll('.button');
   buttons.forEach((button) => (button.disabled = true));
+}
+
+function disableInput(array, input) {
+  input.disabled = true;
+  array.forEach((button) => (button.disabled = true));
 }
