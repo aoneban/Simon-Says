@@ -61,7 +61,6 @@ class Keyboard {
       this.easy = true;
       this.medium = false;
       this.hard = false;
-      this.changeRound();
       addHiddenClass('hidden', 'letter');
       removeClass('hidden', 'figure');
     });
@@ -71,11 +70,10 @@ class Keyboard {
     buttonMedium.textContent = 'Medium';
     buttonMedium.addEventListener('click', () => {
       if (this.round === 1) {
-        disabledButtons();
         this.easy = false;
         this.medium = true;
         this.hard = false;
-        this.changeRound();
+        disabledButtons();
         addHiddenClass('hidden', 'figure');
         removeClass('hidden', 'letter');
       }
@@ -86,11 +84,10 @@ class Keyboard {
     buttonHard.textContent = 'Hard';
     buttonHard.addEventListener('click', () => {
       if (this.round === 1) {
-        disabledButtons();
         this.easy = false;
         this.medium = false;
         this.hard = true;
-        this.changeRound();
+        disabledButtons();
         removeClass('hidden', 'letter');
         removeClass('hidden', 'figure');
       }
@@ -246,6 +243,7 @@ class Keyboard {
     button.classList.add('next-button', 'hidden');
     button.textContent = 'Next';
     button.addEventListener('click', () => {
+      this.changeRound();
       document.querySelector('.button-new-game').disabled = true;
       document.querySelector('.sequence-button').classList.remove('hidden');
       button.classList.add('hidden');
@@ -340,7 +338,6 @@ class Keyboard {
         tempArray.length = 0;
         this.currentLetters += 2;
         clearInputFromText();
-        this.changeRound();
         document.querySelector('.next-button').classList.remove('hidden');
         document.querySelector('.sequence-button').classList.add('hidden');
       }
