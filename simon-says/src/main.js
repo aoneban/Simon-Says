@@ -171,6 +171,7 @@ class Keyboard {
   }
 
   showElements() {
+    document.querySelector('.sequence-button').classList.remove('hidden');
     document.querySelector('.text-input').classList.remove('hidden');
     document.querySelector('.round').classList.remove('hidden');
     document.querySelector('.button-new-game').classList.remove('hidden');
@@ -212,7 +213,7 @@ class Keyboard {
   createSequenceButton() {
     const button = document.createElement('button');
     const input = document.querySelector('.text-input');
-    button.classList.add('sequence-button');
+    button.classList.add('sequence-button', 'hidden');
     button.textContent = 'Repeat Sequence';
     button.disabled = true;
     button.addEventListener('click', () => {
