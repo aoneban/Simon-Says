@@ -246,6 +246,7 @@ class Keyboard {
     button.addEventListener('click', () => {
       this.changeRound();
       document.querySelector('.button-new-game').disabled = true;
+      document.querySelector('.sequence-button').disabled = true;
       document.querySelector('.sequence-button').classList.remove('hidden');
       button.classList.add('hidden');
       checkCurrentLevel(this.easy, this.medium, this.hard);
