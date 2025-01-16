@@ -14,6 +14,7 @@ class Keyboard {
   tempArray = [];
   currentLetters = 2;
   totalButtons = 10;
+  isProcessingKey = false;
   arrayToShowInConsole = [];
 
   constructor(arr) {
@@ -274,14 +275,23 @@ class Keyboard {
 
   keydownHandler() {
     document.addEventListener('keydown', (event) => {
+      if (this.isProcessingKey) {
+        event.preventDefault();
+        return;
+      }
+
       forbiddenEditInput(event);
       const buttons = document.querySelectorAll('.button');
+
       buttons.forEach((button) => {
         if (button.textContent === event.key && button.disabled === false) {
+          this.isProcessingKey = true;
           button.classList.add('active');
+
           setTimeout(() => {
             button.classList.remove('active');
-          }, 200);
+            this.isProcessingKey = false;
+          }, 500);
         }
       });
     });
