@@ -95,7 +95,7 @@ class Keyboard {
       }
     });
 
-    wrapperButtons.append(newGame, buttonEasy, buttonMedium, buttonHard);
+    wrapperButtons.append(buttonEasy, buttonMedium, buttonHard, newGame);
     bodyElement.append(wrapperButtons);
   }
 
@@ -103,6 +103,9 @@ class Keyboard {
     const bodyElement = document.getElementById('app');
     this.createGreetings();
     this.createLevelButtons();
+
+    const wrapperInput = document.createElement('div');
+    wrapperInput.classList.add('wrapper-input');
 
     const input = document.createElement('input');
     input.classList.add('text-input', 'hidden');
@@ -114,7 +117,9 @@ class Keyboard {
     const round = document.createElement('p');
     round.classList.add('round', 'hidden');
     round.textContent = `Round: ${this.round}/5`;
-    bodyElement.append(round, input);
+
+    wrapperInput.append(round, input);
+    bodyElement.append(wrapperInput);
 
     const wrapper = document.createElement('div');
     wrapper.classList.add('wrapper');

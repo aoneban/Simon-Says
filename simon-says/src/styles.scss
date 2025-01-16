@@ -86,6 +86,7 @@ body {
   text-transform: uppercase;
   border-radius: 4px;
   background-color: #ecefe2;
+  margin: 15px 0 0 0;
   padding: 10px;
   font-size: 1.5rem;
   font-weight: 600;
@@ -114,6 +115,10 @@ body {
   min-height: 400px;
 }
 
+.wrapper-input {
+  min-height: 120px;
+}
+
 .keyboard-wrapper {
   display: flex;
   flex-direction: column;
@@ -132,8 +137,15 @@ body {
 }
 
 .wrapper-buttons {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(4, 100px); /* Количество колонок и их ширина */
+  grid-gap: 10px; /* Промежуток между элементами */
+}
+
+.button-level {
+  width: 100px; /* Фиксированная ширина */
+  height: 50px;
+  padding: 8px 2px;
 }
 
 button {
@@ -289,10 +301,16 @@ button:disabled {
 }
 
 @media (max-width: 480px) {
+  .wrapper-buttons {
+    grid-template-columns: repeat(4, 90px);
+    grid-gap: 5px;
+  }
   .button-level {
-    min-width: 31px;
+    width: 90px;
     padding: 0.6em;
     margin: 4px;
+    height: auto;
+    font-size: 13px;
   }
 
   .button {
@@ -303,5 +321,19 @@ button:disabled {
 
   .greetings {
     font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .wrapper-buttons {
+    grid-template-columns: repeat(4, 80px);
+    grid-gap: 5px;
+  }
+  .button-level {
+    width: 70px;
+    padding: 1em 3px;
+    margin: 4px;
+    height: auto;
+    font-size: 11px;
   }
 }
