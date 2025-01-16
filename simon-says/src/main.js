@@ -44,6 +44,7 @@ class Keyboard {
     newGame.classList.add('button-level', 'button-new-game', 'hidden');
     newGame.textContent = 'New Game';
     newGame.addEventListener('click', () => {
+      newGame.classList.add('hidden');
       this.round = 1;
       this.attempts = 0;
       this.arrayLetters = [];
@@ -115,6 +116,9 @@ class Keyboard {
     round.textContent = `Round: ${this.round}/5`;
     bodyElement.append(round, input);
 
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
+
     const keyboardWrapper = document.createElement('div');
     keyboardWrapper.classList.add('keyboard-wrapper');
     keyboardWrapper.addEventListener('click', (event) => {
@@ -136,8 +140,8 @@ class Keyboard {
         );
       }
     });
-
-    bodyElement.append(keyboardWrapper);
+    wrapper.append(keyboardWrapper);
+    bodyElement.append(wrapper);
 
     this.keyboardOne = document.createElement('div');
     this.keyboardOne.classList.add('keyboard-one');
@@ -495,9 +499,11 @@ function prepareForNewGame() {
   const input = document.querySelector('.text-input');
   input.value = '';
   input.disabled = true;
+  document.querySelector('.round').classList.add('hidden');
+  document.querySelector('.text-input').classList.add('hidden');
+  document.querySelector('.sequence-button').classList.add('hidden');
   document.querySelector('.next-button').classList.add('hidden');
   document.querySelector('.start-button').classList.remove('hidden');
-  document.querySelector('.sequence-button').classList.remove('hidden');
   document.querySelector('.sequence-button').disabled = true;
   document.querySelector('.easy').disabled = false;
   document.querySelector('.medium').disabled = false;

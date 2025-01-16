@@ -110,6 +110,10 @@ body {
   transition: 0.1s ease;
 }
 
+.wrapper {
+  min-height: 400px;
+}
+
 .keyboard-wrapper {
   display: flex;
   flex-direction: column;
