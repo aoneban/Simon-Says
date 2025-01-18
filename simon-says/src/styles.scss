@@ -103,6 +103,17 @@ body {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
+.developer {
+  position: fixed;
+  right: 15px;
+  bottom: 10px;
+  font-size: 12px;
+  background-color: #202640;
+  color: white;
+  padding: 0px 5px;
+  font-style: italic;
+}
+
 .active {
   background-color: rgb(83, 147, 147) !important;
   border-radius: 20%;

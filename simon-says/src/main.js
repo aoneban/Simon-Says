@@ -289,6 +289,13 @@ class Keyboard {
     this.keyboardTwo.append(button);
   }
 
+  createDeveloper() {
+    const dev = document.createElement('p');
+    dev.classList.add('developer');
+    dev.textContent = 'Developed by Ashot Bagiran';
+    document.body.append(dev);
+  }
+
   keydownHandler() {
     document.addEventListener('keydown', (event) => {
       if (this.isProcessingKey) {
@@ -385,5 +392,6 @@ function initialGame() {
   keyboard.createSequenceButton();
   keyboard.createNextButton();
   keyboard.keydownHandler();
+  keyboard.createDeveloper();
 }
 initialGame();
