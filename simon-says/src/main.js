@@ -2,7 +2,22 @@ import '@/styles.scss';
 import { buttonNumbers, buttonLetters } from './data';
 import removeClass from './modules/removeClass';
 import addHiddenClass from './modules/addClass';
-import { getRandomNumberInRange } from './modules/generateRandomNum';
+import { loopForCheckButtons } from './modules/generateRandomNum';
+import { modalResponses } from './modules/modal';
+import {
+  removeModalWindow,
+  disabledButtons,
+  disableInput,
+  prepareForNewGame,
+  getCurrentArrayButtons,
+  checkForbiddenSymbolsToInput,
+  checkCurrentLevel,
+  prepareInputToEnter,
+  clearInputFromText,
+  forbiddenEditInput,
+  generatePauseBetweenButtons,
+  showElements,
+} from './modules/utils';
 
 class Keyboard {
   round = 1;
@@ -108,14 +123,14 @@ class Keyboard {
     wrapperInput.classList.add('wrapper-input');
 
     const input = document.createElement('input');
-    input.classList.add('text-input', 'hidden');
+    input.classList.add('text-input');
     input.disabled = true;
     input.addEventListener('input', (event) => {
       this.handlerToWinOrLose();
     });
 
     const round = document.createElement('p');
-    round.classList.add('round', 'hidden');
+    round.classList.add('round');
     round.textContent = `Round: ${this.round}/5`;
 
     wrapperInput.append(round, input);
@@ -180,20 +195,12 @@ class Keyboard {
     }
   }
 
-  showElements() {
-    document.querySelector('.sequence-button').classList.remove('hidden');
-    document.querySelector('.text-input').classList.remove('hidden');
-    document.querySelector('.round').classList.remove('hidden');
-    document.querySelector('.button-new-game').classList.remove('hidden');
-    document.querySelector('.button-new-game').disabled = true;
-  }
-
   createStartButton() {
     const button = document.createElement('button');
     button.classList.add('start-button');
     button.textContent = 'Start';
     button.addEventListener('click', () => {
-      this.showElements();
+      showElements();
       button.classList.add('hidden');
       setTimeout(() => {
         checkCurrentLevel(this.easy, this.medium, this.hard);
@@ -380,195 +387,3 @@ function initialGame() {
   keyboard.keydownHandler();
 }
 initialGame();
-
-function generatePauseBetweenButtons(arr1, arr2, arr3 = []) {
-  for (let i = 0; i < arr1.length; i += 1) {
-    for (let j = 0; j < arr2.length; j += 1) {
-      let symbol = arr1[i];
-      if (typeof symbol === 'number' && symbol > 9) {
-        symbol = String.fromCharCode(symbol + 55);
-      }
-      if (
-        symbol.toString().toUpperCase() === arr2[j].textContent.toUpperCase()
-      ) {
-        setTimeout(() => {
-          arr3.push(arr2[j].textContent);
-          arr2[j].classList.add('active');
-          setTimeout(() => {
-            arr2[j].classList.remove('active');
-          }, 300);
-        }, i * 1000);
-      }
-    }
-  }
-}
-
-function forbiddenEditInput(event) {
-  const input = document.querySelector('.text-input');
-  if (document.activeElement === input) {
-    const cursorPosition = input.selectionStart;
-    if (
-      (event.key === 'Backspace' && cursorPosition <= input.value.length) ||
-      (event.key === 'Delete' && cursorPosition < input.value.length)
-    ) {
-      event.preventDefault();
-    }
-    if (cursorPosition < input.value.length && event.key.length === 1) {
-      event.preventDefault();
-    }
-  }
-}
-
-function clearInputFromText() {
-  const input = document.querySelector('.text-input');
-  input.value = '';
-}
-
-function prepareInputToEnter(bool, figure, bool2 = false) {
-  document.querySelector('.sequence-button').disabled = bool2;
-  const input = document.querySelector('.text-input');
-  document
-    .querySelectorAll('.button')
-    .forEach((button) => (button.disabled = bool));
-  input.disabled = bool;
-  input.focus();
-  input.setAttribute('placeholder', 'Enter the answer');
-  input.setAttribute('maxlength', figure);
-}
-
-function checkCurrentLevel(easy, medium, hard) {
-  if (easy) {
-    document.querySelector('.easy').disabled = false;
-    document.querySelector('.medium').disabled = true;
-    document.querySelector('.hard').disabled = true;
-  } else if (medium) {
-    document.querySelector('.easy').disabled = true;
-    document.querySelector('.medium').disabled = false;
-    document.querySelector('.hard').disabled = true;
-  } else if (hard) {
-    document.querySelector('.easy').disabled = true;
-    document.querySelector('.medium').disabled = true;
-    document.querySelector('.hard').disabled = false;
-  }
-}
-
-function loopForCheckButtons(easy, medium, hard, array, letters) {
-  for (let i = 0; i < letters; i += 1) {
-    let randomIndex;
-    if (easy) {
-      randomIndex = getRandomNumberInRange(0, 9);
-    } else if (medium) {
-      randomIndex = getRandomNumberInRange(10, 35);
-      if (randomIndex > 9) {
-        randomIndex = String.fromCharCode(randomIndex + 55);
-      }
-    } else if (hard) {
-      randomIndex = getRandomNumberInRange(0, 35);
-      if (randomIndex > 9) {
-        randomIndex = String.fromCharCode(randomIndex + 55);
-      }
-    }
-    array.push(randomIndex);
-  }
-}
-
-function checkForbiddenSymbolsToInput(array) {
-  const input = document.querySelector('.text-input');
-  const value = input.value;
-  let isValid = true;
-  for (let i = 0; i < value.length; i++) {
-    const char = value.charAt(i).toUpperCase();
-    const isCharValid = array.some(
-      (letter) => letter.textContent.toUpperCase() === char,
-    );
-    if (!isCharValid) {
-      isValid = false;
-      break;
-    }
-  }
-  if (!isValid) {
-    input.value = value.slice(0, -1);
-  }
-}
-
-function getCurrentArrayButtons(array) {
-  const currentButtons = document.querySelectorAll('.button');
-  currentButtons.forEach((button) => {
-    if (!button.classList.contains('hidden')) {
-      array.push(button);
-    }
-  });
-}
-
-function prepareForNewGame() {
-  const input = document.querySelector('.text-input');
-  input.value = '';
-  input.disabled = true;
-  document.querySelector('.round').classList.add('hidden');
-  document.querySelector('.text-input').classList.add('hidden');
-  document.querySelector('.sequence-button').classList.add('hidden');
-  document.querySelector('.next-button').classList.add('hidden');
-  document.querySelector('.start-button').classList.remove('hidden');
-  document.querySelector('.sequence-button').disabled = true;
-  document.querySelector('.easy').disabled = false;
-  document.querySelector('.medium').disabled = false;
-  document.querySelector('.hard').disabled = false;
-  document
-    .querySelectorAll('.button')
-    .forEach((button) => (button.disabled = true));
-}
-
-function modalResponses(res, withTimeout = false) {
-  const body = document.body;
-
-  const modal = document.createElement('div');
-  modal.setAttribute('id', 'myModal');
-  modal.classList.add('modal');
-  modal.style.display = 'block';
-
-  const content = document.createElement('div');
-  content.classList.add('modal-content');
-
-  const modalBody = document.createElement('div');
-  modalBody.classList.add('modal-body');
-
-  const message = document.createElement('p');
-  message.classList.add('content-message');
-  message.textContent = res;
-
-  const span = document.createElement('span');
-  span.classList.add('close');
-  span.innerHTML = '&times;';
-  span.addEventListener('click', function () {
-    modal.remove();
-  });
-
-  modalBody.append(message, span);
-  content.append(modalBody);
-  modal.append(content);
-  body.append(modal);
-
-  if (withTimeout) {
-    setTimeout(() => {
-      modal.remove();
-    }, 3000);
-  }
-  return body;
-}
-
-function removeModalWindow() {
-  if (document.getElementById('myModal')) {
-    document.getElementById('myModal').remove();
-  }
-}
-
-function disabledButtons() {
-  const buttons = document.querySelectorAll('.button');
-  buttons.forEach((button) => (button.disabled = true));
-}
-
-function disableInput(array) {
-  const input = document.querySelector('.text-input');
-  input.disabled = true;
-  array.forEach((button) => (button.disabled = true));
-}

@@ -138,12 +138,12 @@ body {
 
 .wrapper-buttons {
   display: grid;
-  grid-template-columns: repeat(4, 100px); /* Количество колонок и их ширина */
-  grid-gap: 10px; /* Промежуток между элементами */
+  grid-template-columns: repeat(4, 100px);
+  grid-gap: 10px;
 }
 
 .button-level {
-  width: 100px; /* Фиксированная ширина */
+  width: 100px;
   height: 50px;
   padding: 8px 2px;
 }
@@ -180,14 +180,14 @@ button:disabled {
 }
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  padding-top: 100px; /* Location of the box */
+  display: none;
+  position: fixed; 
+  padding-top: 100px;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
 /* Modal Content */
